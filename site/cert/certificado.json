@@ -1,0 +1,15 @@
+{
+  "status": "certificado en GEA producción",
+  "document_id": "42b7ab12-78c3-4af3-8407-54d47de8e767",
+  "code": "JY6AUV957MF5",
+  "verification_url": "https://geausa.propensionesabogados.com/verify/aegis/asset/certification/42b7ab12-78c3-4af3-8407-54d47de8e767/",
+  "source_hash": "444b16a66864324405ccdcbdb50a695428f83cdafbf445d89c54d8ddaa867ceb",
+  "public_copy_hash": "f44733ac649512663c768f7b93cacddf9d594920dfce08f3bc9ecfff2f57215d",
+  "public_copy_url": "https://geausa.propensionesabogados.com/api/certificates/external/42b7ab12-78c3-4af3-8407-54d47de8e767/public-copy/",
+  "issued_at": "2026-11-01T22:19:43.474768+00:00",
+  "content_hash": "3c4ebaa901a0af1af4329e08d33f232c57c79647836a93872259cb966683da97",
+  "idempotency_key": "ingreq-af-v1-3c4ebaa901a0af1af4329e08d33f232c57c79647836a93872259cb966683da97",
+  "reference": "ING-REQ-AF-GEA-v1.0.0",
+  "issuer": "ing-de-requisitos",
+  "environment": "produccion"
+}
