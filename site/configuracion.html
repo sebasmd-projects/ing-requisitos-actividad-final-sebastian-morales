@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Configuración — GEA Grupo 7</title>
+<meta name="description" content="Configuración: GEA — Gestión Estratégica de Activos">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<div class="layout">
+<nav class="site-nav" aria-label="Menú principal">
+<p class="brand">GEA<span>Grupo 7</span></p>
+<ul>
+<li><a href="index.html">Inicio</a></li>
+<li><a href="calidad.html">Calidad</a></li>
+<li><a href="pruebas.html">Pruebas</a></li>
+<li><a class="current" href="configuracion.html" aria-current="page">Configuración</a></li>
+<li><a href="despliegue.html">Despliegue</a></li>
+<li><a href="soporte.html">Soporte</a></li>
+<li><a href="documentacion.html">Documentación</a></li>
+<li><a href="referencias.html">Referencias</a></li>
+</ul>
+</nav>
+<div class="page">
+<main id="contenido">
+<h1>Configuración</h1>
+<h2 id="4a-versionado">4a. Versionado</h2>
+<p><strong>Situación real:</strong> GEA no versiona hoy. <code>pyproject.toml</code> declara <strong>0.1.0</strong> desde el principio, no hay etiquetas de Git y los commits no llevan número.</p>
+<p><strong>Esquema [Propuesta]:</strong> SemVer <code>MAYOR.MENOR.PARCHE</code>, con etiquetas de Git <code>vX.Y.Z</code> y la versión en <code>pyproject.toml</code>. Aplicado a cambios reales del historial:</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">Cambio</th><th scope="col">Qué número sube</th><th scope="col">Ejemplo</th></tr></thead><tbody><tr><td data-label="Cambio">Corrección compatible: «Seguridad: fijo wheel ≥ 0.46.2 (CVE-2026-24049)»</td><td data-label="Qué número sube">PARCHE</td><td data-label="Ejemplo">0.2.0 → <strong>0.2.1</strong></td></tr><tr><td data-label="Cambio">Funcionalidad compatible: «C1: certificación documental para emisores externos»</td><td data-label="Qué número sube">MENOR (PARCHE a 0)</td><td data-label="Ejemplo">0.1.0 → <strong>0.2.0</strong></td></tr><tr><td data-label="Cambio">Cambio incompatible: por ejemplo, retirar el login antiguo o cambiar <code>jcs.py</code>, lo que invalida los master hash ya anclados</td><td data-label="Qué número sube">MAYOR</td><td data-label="Ejemplo">0.x → <strong>1.0.0</strong></td></tr></tbody></table></div>
+<h2 id="4b-repositorio-y-ramas">4b. Repositorio y ramas</h2>
+<p>Git con GitHub: <code>sebasmd-projects/gea_module_0</code>, repositorio privado. Pull Requests numerados (#56 a #62 recientes).</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">Rama</th><th scope="col">Propósito</th></tr></thead><tbody><tr><td data-label="Rama"><code>master</code></td><td data-label="Propósito">Código estable. Es lo que corre en producción (el servidor hace <code>git pull --ff-only</code> de esta rama)</td></tr><tr><td data-label="Rama"><code>feat/*</code></td><td data-label="Propósito">Una funcionalidad por rama. Hoy: <code>feat/notificaciones</code>, <code>feat/jotform-a-local</code>, <code>feat/solicitud-formulario-de-certificacion-documental</code></td></tr><tr><td data-label="Rama"><code>security/*</code></td><td data-label="Propósito">Actualizaciones de seguridad de dependencias (<code>security/deps-2026-10</code>)</td></tr><tr><td data-label="Rama"><code>claude/*</code></td><td data-label="Propósito">Ramas de trabajo asistido por IA; pasan por la misma revisión y PR</td></tr></tbody></table></div>
+<h2 id="4c-entornos">4c. Entornos</h2>
+<div class="table-wrap"><table><thead><tr><th scope="col">Entorno</th><th scope="col">Propósito</th><th scope="col">Dónde se ejecuta</th><th scope="col">Quién tiene acceso</th><th scope="col">Rama desde la que se despliega</th></tr></thead><tbody><tr><td data-label="Entorno">Desarrollo</td><td data-label="Propósito">Programar y depurar</td><td data-label="Dónde se ejecuta">Portátil (Windows/PowerShell o Linux) con <code>uv run python manage.py runserver</code> en <code>0.0.0.0:8000</code>, MySQL o PostgreSQL local, <code>DJANGO_DEBUG=True</code>, correo en consola</td><td data-label="Quién tiene acceso">El desarrollador</td><td data-label="Rama desde la que se despliega"><code>feat/*</code> de su tarea</td></tr><tr><td data-label="Entorno">Pruebas</td><td data-label="Propósito">Verificar antes de integrar y enseñar el sistema sin tocar producción</td><td data-label="Dónde se ejecuta">Suite automática con <code>app_core.settings_test</code> (SQLite en memoria) y el demo <a href="https://geademo.sebasmd.com">https://geademo.sebasmd.com</a>, en un cPanel compartido con LiteSpeed (dominio personal)</td><td data-label="Quién tiene acceso">Desarrollador, revisor y quien recibe el enlace del demo</td><td data-label="Rama desde la que se despliega">La rama del Pull Request (suite) · <code>master</code> (demo)</td></tr><tr><td data-label="Entorno">Producción</td><td data-label="Propósito">Atender a usuarios reales</td><td data-label="Dónde se ejecuta">cPanel (Conexcol) con LiteSpeed, MySQL 8.0.36, Redis en un VPS por TLS; <a href="https://geausa.propensionesabogados.com">https://geausa.propensionesabogados.com</a></td><td data-label="Quién tiene acceso">Administrador del hosting y superusuarios con segundo factor</td><td data-label="Rama desde la que se despliega"><code>master</code></td></tr></tbody></table></div>
+<p>El demo está <strong>en despliegue</strong>. Falta que el proveedor del cPanel compartido dé permiso para instalar <code>mysqlclient</code>, que se compila con las cabeceras de MySQL.</p>
+<h2 id="4d-control-de-cambios">4d. Control de cambios</h2>
+<figure><a href="img/10-flujo-control-cambios.png"><img src="img/10-flujo-control-cambios.png" alt="10 flujo control cambios" width="3568" height="588" loading="lazy"></a></figure>
+<ol><li><strong>Solicitud.</strong> Quien detecta la necesidad llena el formato de solicitud de cambio (CR). Responsable: el solicitante (SH-01 a SH-03 o un usuario vía PQRS).</li><li><strong>Evaluación.</strong> Se analiza el impacto: módulos, invariantes del <code>CLAUDE.md</code>, migraciones, riesgo y esfuerzo. Responsable: el líder técnico (Juan Sebastián Morales Delgado).</li><li><strong>Aprobación.</strong> Se aprueba, se rechaza o se pospone, y se fija la versión destino. Responsable: la Dirección administrativa (SH-02) de Propensiones Abogados.</li><li><strong>Implementación.</strong> Rama <code>feat/*</code> o <code>fix/*</code>, código con su prueba y Pull Request hacia <code>master</code>. Responsable: el desarrollador asignado.</li><li><strong>Verificación.</strong> Suite completa, <code>check_security</code> y revisión del PR. Si pasa, merge y despliegue; si no, vuelve al paso 4. Responsable: el revisor del PR.</li></ol>
+<p>El proceso y el formato son <strong>[Propuesta]</strong>: hoy los cambios se registran como Pull Requests de GitHub, sin formato de solicitud. El ejemplo usa un cambio real (el commit «Un certificado puede tener varios titulares, no solo uno»); el ID, la fecha y el solicitante son ilustrativos.</p>
+<p><strong>Formato de solicitud de cambio:</strong></p>
+<div class="table-wrap"><table><thead><tr><th scope="col">Campo</th><th scope="col">Ejemplo</th></tr></thead><tbody><tr><td data-label="Campo">ID</td><td data-label="Ejemplo">CR-2026-014</td></tr><tr><td data-label="Campo">Fecha</td><td data-label="Ejemplo">01/11/2026</td></tr><tr><td data-label="Campo">Solicitante</td><td data-label="Ejemplo">Juan Sebastián Morales Delgado</td></tr><tr><td data-label="Campo">Descripción</td><td data-label="Ejemplo">Un certificado debe poder tener varios titulares, no solo uno</td></tr><tr><td data-label="Campo">Justificación</td><td data-label="Ejemplo">Los integrantes de una organización quedaban fuera del histórico</td></tr><tr><td data-label="Campo">Impacto</td><td data-label="Ejemplo"><code>certificates</code> (FK → M2M <code>holders</code>), migración, <code>code_gen/access.py</code>; riesgo medio</td></tr><tr><td data-label="Campo">Prioridad</td><td data-label="Ejemplo">Alta</td></tr><tr><td data-label="Campo">Estado</td><td data-label="Ejemplo">Aprobado / En curso / Verificado / Cerrado / Rechazado</td></tr><tr><td data-label="Campo">Responsable</td><td data-label="Ejemplo">Juan Sebastián Morales Delgado</td></tr><tr><td data-label="Campo">Versión destino</td><td data-label="Ejemplo">0.3.0</td></tr></tbody></table></div>
+</main>
+<footer class="site-footer">
+<p>Hash de contenido (SHA-256): <code>9b8dd2ceeef950e642818cb88cf13f21f223cb85cb9f073a07aecb39b49d4562</code></p>
+<p>Estado: <span class="cert-status">Pendiente de certificación GEA</span></p>
+</footer>
+</div>
+</div>
+</body>
+</html>

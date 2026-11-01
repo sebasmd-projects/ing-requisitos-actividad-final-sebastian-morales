@@ -1,0 +1,76 @@
+GEA (sebasmd-projects/gea_module_0) - hechos verificados con git
+Generado: 2026-11-01 desde un clon completo (no superficial) del repositorio publico.
+Los datos son salida directa de los comandos indicados; nada esta inferido.
+
+## Rama por defecto y HEAD  (git symbolic-ref refs/remotes/origin/HEAD ; git rev-parse origin/master)
+refs/remotes/origin/master
+HEAD SHA: 5be1ed914df1a2764b2ae238e9ff252d1ea937c8
+HEAD SHA corto: 5be1ed9
+Fecha del HEAD: 2026-10-26
+Commits totales alcanzables desde HEAD (git rev-list --count origin/master): 385
+Merge commits: 67
+Primer commit: 08db029 2025-08-26 First Commit
+
+## Ramas remotas (git branch -r)
+  origin/HEAD -> origin/master
+  origin/claude/claude-md-context-architecture-map-jlazo4
+  origin/claude/elegant-mayer-1u6lf1
+  origin/feat/jotform-a-local
+  origin/feat/notificaciones
+  origin/feat/solicitud-formulario-de-certificacion-documental
+  origin/master
+  origin/security/deps-2026-10
+
+## Tags (git tag)
+VACIO: el repositorio no tiene ninguna etiqueta (tag) en el clon completo.
+
+## Version en pyproject.toml en HEAD (git show HEAD:pyproject.toml | grep -m1 '^version')
+version = "0.1.0"
+
+## Merges de los PR #56 a #62 (git log --merges, filtrados por 'Merge pull request #5[6-9]|#6[0-2]')
+c1f68ae 2026-10-19 Merge pull request #62 from sebasmd-projects/claude/elegant-mayer-1u6lf1
+a3214a3 2026-09-20 Merge pull request #61 from sebasmd-projects/feat/notificaciones
+42dbf03 2026-09-15 Merge pull request #60 from sebasmd-projects/claude/claude-md-context-architecture-map-jlazo4
+4134399 2026-09-14 Merge pull request #59 from sebasmd-projects/claude/claude-md-context-architecture-map-jlazo4
+4e4389b 2026-09-14 Merge pull request #58 from sebasmd-projects/claude/claude-md-context-architecture-map-jlazo4
+af95c09 2026-09-14 Merge pull request #57 from sebasmd-projects/claude/claude-md-context-architecture-map-jlazo4
+789442d 2026-09-13 Merge pull request #56 from sebasmd-projects/claude/claude-md-context-architecture-map-jlazo4
+Total encontrados: 7
+
+## Ramas feat/ fix/ security/ claude/ con fecha del ultimo commit (git for-each-ref refs/remotes)
+origin/claude/claude-md-context-architecture-map-jlazo4 2026-10-19
+origin/claude/elegant-mayer-1u6lf1 2026-10-16
+origin/feat/jotform-a-local 2026-09-27
+origin/feat/notificaciones 2026-09-27
+origin/feat/solicitud-formulario-de-certificacion-documental 2026-09-27
+origin/security/deps-2026-10 2026-10-26
+(No hay ramas fix/ en el remoto si no aparecen arriba.)
+
+## Estado de cada rama respecto a master (git rev-list --count origin/master..<rama> ; git merge-base --is-ancestor)
+origin/claude/claude-md-context-architecture-map-jlazo4 commits-por-delante-de-master=0 punta=4e9e396 incluida-en-master=si
+origin/claude/elegant-mayer-1u6lf1 commits-por-delante-de-master=0 punta=d41decb incluida-en-master=si
+origin/feat/jotform-a-local commits-por-delante-de-master=0 punta=5b910e8 incluida-en-master=si
+origin/feat/notificaciones commits-por-delante-de-master=0 punta=5b910e8 incluida-en-master=si
+origin/feat/solicitud-formulario-de-certificacion-documental commits-por-delante-de-master=0 punta=5b910e8 incluida-en-master=si
+origin/security/deps-2026-10 commits-por-delante-de-master=0 punta=965f2a5 incluida-en-master=si
+
+## Autores (git log --format=%an | sort | uniq -c)
+    107 Claude
+    202 Sebastian Morales
+     76 Sebastian Morales PC-escritorio
+
+## Commits por mes (fecha de autor)
+      9 2025-08
+     62 2025-09
+     19 2025-10
+     12 2025-11
+     20 2025-12
+     46 2026-01
+     10 2026-02
+      2 2026-03
+     84 2026-08
+    111 2026-09
+     10 2026-10
+
+## CHANGELOG en HEAD
+CHANGELOG.md NO existe en HEAD

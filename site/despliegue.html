@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Despliegue — GEA Grupo 7</title>
+<meta name="description" content="Despliegue: GEA — Gestión Estratégica de Activos">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<div class="layout">
+<nav class="site-nav" aria-label="Menú principal">
+<p class="brand">GEA<span>Grupo 7</span></p>
+<ul>
+<li><a href="index.html">Inicio</a></li>
+<li><a href="calidad.html">Calidad</a></li>
+<li><a href="pruebas.html">Pruebas</a></li>
+<li><a href="configuracion.html">Configuración</a></li>
+<li><a class="current" href="despliegue.html" aria-current="page">Despliegue</a></li>
+<li><a href="soporte.html">Soporte</a></li>
+<li><a href="documentacion.html">Documentación</a></li>
+<li><a href="referencias.html">Referencias</a></li>
+</ul>
+</nav>
+<div class="page">
+<main id="contenido">
+<h1>Despliegue</h1>
+<h2 id="5a-requisitos-tecnicos-minimos">5a. Requisitos técnicos mínimos</h2>
+<div class="table-wrap"><table><thead><tr><th scope="col">Categoría</th><th scope="col">Requisito</th><th scope="col">Valor mínimo</th></tr></thead><tbody><tr><td data-label="Categoría">Software</td><td data-label="Requisito">Python</td><td data-label="Valor mínimo">3.11</td></tr><tr><td data-label="Categoría">Software</td><td data-label="Requisito">Framework</td><td data-label="Valor mínimo">Django 5.2 LTS (<code>&gt;=5.2,&lt;6.0</code>)</td></tr><tr><td data-label="Categoría">Base de datos</td><td data-label="Requisito">Motor</td><td data-label="Valor mínimo">MySQL 8.0.11 (producción: 8.0.36), o MariaDB 10.5, o PostgreSQL 14</td></tr><tr><td data-label="Categoría">Software</td><td data-label="Requisito">Caché y límites de intentos (recomendado)</td><td data-label="Valor mínimo">Redis con TLS (puerto 6380) y usuario ACL</td></tr><tr><td data-label="Categoría">Hosting</td><td data-label="Requisito">Servidor de aplicación</td><td data-label="Valor mínimo">cPanel con aplicación Python, servidor LiteSpeed y acceso SSH</td></tr><tr><td data-label="Categoría">Almacenamiento</td><td data-label="Requisito">Espacio libre</td><td data-label="Valor mínimo">1 GB (estáticos ≈ 45 MB, más media, respaldos y logs; estimación)</td></tr><tr><td data-label="Categoría">Red</td><td data-label="Requisito">HTTPS</td><td data-label="Valor mínimo">Certificado TLS válido (AutoSSL) en el puerto 443</td></tr><tr><td data-label="Categoría">Software</td><td data-label="Requisito">Procesado de vídeo</td><td data-label="Valor mínimo">ffmpeg en el <code>PATH</code> (galería multimedia)</td></tr><tr><td data-label="Categoría">Software</td><td data-label="Requisito">Conector de MySQL</td><td data-label="Valor mínimo"><code>mysqlclient</code> 2.2.8. Se compila al instalarse: necesita las cabeceras de MySQL (<code>libmysqlclient-dev</code> o <code>mysql-devel</code>) y <code>pkg-config</code>. En un cPanel compartido hay que pedírselas al proveedor</td></tr></tbody></table></div>
+<h2 id="arquitectura-de-despliegue">Arquitectura de despliegue</h2>
+<figure><a href="img/02-c4-contenedores.png"><img src="img/02-c4-contenedores.png" alt="Qué corre en cada servidor y cómo se comunican." width="2946" height="1796" loading="lazy"></a><figcaption>Qué corre en cada servidor y cómo se comunican.</figcaption></figure>
+<h2 id="5b-procedimiento-de-instalacion">5b. Procedimiento de instalación</h2>
+<figure><a href="img/09-flujo-despliegue.png"><img src="img/09-flujo-despliegue.png" alt="09 flujo despliegue" width="1658" height="5036" loading="lazy"></a></figure>
+<ol><li><strong>Comprobar en local</strong> con <code>uv run python manage.py check --deploy</code>, <code>check_security</code> y <code>check_requirements</code>. → Los tres terminan sin hallazgos.</li><li><strong>Exportar dependencias</strong> con <code>uv export --no-dev --format=requirements-txt &gt; requirements.txt</code>, y hacer commit. → <code>check_requirements</code> confirma que producción instalará lo declarado.</li><li><strong>Respaldar</strong> en el servidor con <code>python manage.py db_backup -o backups/</code>. → Se crea el respaldo cifrado con permisos <code>600</code>.</li><li><strong>Traer el código</strong> con <code>git pull --ff-only</code>. → Git responde «Fast-forward» sin conflictos.</li><li><strong>Instalar dependencias</strong> con <code>pip install -r requirements.txt</code> en el entorno virtual de la aplicación Python de cPanel. → Termina sin errores y <code>pip check</code> responde «No broken requirements found». Si falla al compilar <code>mysqlclient</code>, faltan las cabeceras de MySQL en el servidor (requisito de 5a).</li><li><strong>Completar el <code>.env</code></strong> (copiado de <code>docs/env.example</code>) y ejecutar <code>python manage.py check</code>. → No aparece <code>ImproperlyConfigured</code>; si falta una variable, el mensaje dice cuál.</li><li><strong>Migrar y recoger estáticos</strong> con <code>python manage.py migrate</code>, <code>collectstatic --noinput</code> y <code>compilemessages</code>. → Una segunda ejecución de <code>migrate</code> dice «No migrations to apply», y <code>collectstatic</code> termina sin errores.</li><li><strong>Proteger la media</strong> copiando <code>deploy/media.htaccess</code> a <code>MEDIA_ROOT</code> y <code>deploy/media-protected.htaccess</code> a <code>certificates/</code>, <code>passport_images/</code>, <code>signature_images/</code> y <code>pqrs/</code>. → <code>curl -I https://geausa.propensionesabogados.com/public/media/certificates/documents/&lt;archivo&gt;.pdf</code> responde <strong>404</strong>.</li><li><strong>Instalar las tareas programadas</strong> con <code>python manage.py crontab add</code>. → <code>python manage.py check_cron</code> lista las 5 tareas: anclajes OTS, código diario, calentamiento, rotación de logs y avisos legales.</li><li><strong>Reiniciar</strong> con <code>touch tmp/restart.txt</code>. → <code>curl -I https://geausa.propensionesabogados.com/health/</code> responde <strong>200</strong>, y la verificación pública carga.</li></ol>
+<h2 id="5c-plan-de-reversion">5c. Plan de reversión</h2>
+<p><strong>[Propuesta]</strong> GEA no tiene un procedimiento de reversión escrito. Este se basa en sus herramientas reales: <code>git</code>, <code>db_backup</code> y el reinicio de la aplicación.</p>
+<ol><li><strong>Detectar</strong> que <code>/health/</code> no responde 200 o que la verificación pública falla tras desplegar, y anotar el commit que había antes del <code>git pull</code> (paso 3).</li><li><strong>Volver al código anterior</strong> con <code>git checkout &lt;commit_anterior&gt;</code>. Después: <code>pip install -r requirements.txt</code>, <code>collectstatic --noinput</code> y <code>touch tmp/restart.txt</code>.</li><li><strong>Si una migración dañó datos</strong>, restaurar el respaldo cifrado del paso 3 con la <code>GEA_BACKUP_PASSPHRASE</code>.</li><li><strong>Verificar:</strong> <code>/health/</code> responde 200, un login de prueba funciona y una verificación de certificado funciona. Después, abrir una incidencia con la causa.</li></ol>
+<h2 id="5d-evidencia">5d. Evidencia</h2>
+<p>Capturas reales tomadas el 01/11/2026 de las páginas públicas de producción (todas respondieron 200):</p>
+<ul><li><figure><a href="img/evidencia-1-produccion-inicio.png"><img src="img/evidencia-1-produccion-inicio.png" alt="https://geausa.propensionesabogados.com" width="1366" height="860" loading="lazy"></a><figcaption><a href="https://geausa.propensionesabogados.com">https://geausa.propensionesabogados.com</a></figcaption></figure></li><li><figure><a href="img/evidencia-2-produccion-verificacion.png"><img src="img/evidencia-2-produccion-verificacion.png" alt="portal de verificación, paso 1: pide el correo del visitante" width="1366" height="860" loading="lazy"></a><figcaption>portal de verificación, paso 1: pide el correo del visitante</figcaption></figure></li><li><figure><a href="img/evidencia-3-produccion-login.png"><img src="img/evidencia-3-produccion-login.png" alt="inicio de sesión en /account/login/" width="1366" height="860" loading="lazy"></a><figcaption>inicio de sesión en <code>/account/login/</code></figcaption></figure></li></ul>
+</main>
+<footer class="site-footer">
+<p>Hash de contenido (SHA-256): <code>9b8dd2ceeef950e642818cb88cf13f21f223cb85cb9f073a07aecb39b49d4562</code></p>
+<p>Estado: <span class="cert-status">Pendiente de certificación GEA</span></p>
+</footer>
+</div>
+</div>
+</body>
+</html>

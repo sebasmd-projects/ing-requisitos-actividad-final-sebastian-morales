@@ -1,0 +1,21 @@
+{
+  "content_hash": "9b8dd2ceeef950e642818cb88cf13f21f223cb85cb9f073a07aecb39b49d4562",
+  "inputs": {
+    "GEA_contenido_Google_Sites.md": "b3830416521ef9bd724d1bfb0003d5a60d844d24498cf1c0dcfd3998b2e7921a",
+    "img/01-c4-contexto.png": "4c1fd84926b55f6b3e98c8ded66893ad9621b95e72bcce317b5a8570469f9d14",
+    "img/02-c4-contenedores.png": "4e61ab59bea66215680a81eca7c47239b72f5d0678078caacb8234d44dfd1951",
+    "img/03-c4-componentes.png": "4007fb908a3c6916fdd496ec98d2d7cca10bd6972af0085d3860c0ef4bc55e0c",
+    "img/04-arquitectura-peticion.png": "e039f143314f1cfb0f25cfb5c79e1038969964845aefa06b53562b8552e4755f",
+    "img/05-flujo-acceso.png": "55d463ca421bd63af997ad2445d951bdcbcc93f928631068d7fc3a7eb01bd686",
+    "img/06-flujo-orden-12-etapas.png": "7697352904b059ecfec29e98c813caa263080097ea469773d05fc18ed6937b69",
+    "img/07-flujo-certificacion.png": "beaeca385e8774c49d7970d23a167a9f37acd7df71dce9b8fdafefd1f155b21a",
+    "img/08-flujo-verificacion-publica.png": "fc8b5feafbb356e5893812d571f874fef14207b34fa1832e1063b58b94823639",
+    "img/09-flujo-despliegue.png": "aa7f59d3628953af33c17df1cc8bba9fdfd07c8f487b4d2ac4362e6a1a68bb09",
+    "img/10-flujo-control-cambios.png": "918f12509f52ef19a0a10a472defa1204f32af2025ee64a798e872b50b0c597a",
+    "img/11-flujo-soporte.png": "1477cb20ea28981f52a1238a9e9dca071a8cafd9d0e7cf952957719c5fc45eb7",
+    "img/evidencia-1-produccion-inicio.png": "22bb2cb6a0951db72b4aa99cea7a6b9977e2a59eb4ab28ec875a98ab1e55fe37",
+    "img/evidencia-2-produccion-verificacion.png": "db2a2844855926c4686537bded67eb307b39f5371dfb298e594234f80e0311f0",
+    "img/evidencia-3-produccion-login.png": "071037ea5a100e615e45a22a39f4fea8721f10e80800297777b25bdae8b84874"
+  },
+  "status": "pendiente de certificación"
+}

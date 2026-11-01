@@ -1,0 +1,1763 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>GEA · Calidad, pruebas y despliegue | Juan Sebastian Morales Delgado | Grupo 7</title>
+    <meta name="description"
+        content="Plan de calidad, pruebas, configuración, despliegue y soporte de GEA. Ingeniería de Requisitos, Grupo 7.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3/dist/style.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #10181e;
+            --panel: #18242c;
+            --border: #34444e;
+            --ink: #e9efed;
+            --muted: #a6b8bb;
+            --accent: #a9e5b9
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font: 16px/1.7 system-ui, sans-serif
+        }
+
+        a {
+            color: var(--accent);
+            text-underline-offset: 4px
+        }
+
+        a:hover {
+            color: #fff
+        }
+
+        button,
+        a,
+        input,
+        textarea {
+            outline-offset: 4px
+        }
+
+        .skip {
+            position: absolute;
+            left: -999px
+        }
+
+        .skip:focus {
+            left: 20px;
+            top: 10px;
+            z-index: 999;
+            background: #000;
+            padding: 15px
+        }
+
+        aside {
+            position: fixed;
+            inset: 0 auto 0 0;
+            width: 244px;
+            padding: 30px 20px;
+            background: #0b1217;
+            border-right: 1px solid var(--border);
+            overflow: auto
+        }
+
+        .brand {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: white
+        }
+
+        .brand small {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--muted)
+        }
+
+        nav {
+            margin-top: 32px
+        }
+
+        nav a {
+            display: block;
+            padding: 10px 12px;
+            margin: 4px 0;
+            color: #b5c2c6;
+            text-decoration: none;
+            border-radius: 8px
+        }
+
+        nav a span {
+            font: 11px monospace;
+            margin-right: 14px;
+            opacity: .6
+        }
+
+        nav a.active,
+        nav a:hover {
+            color: var(--accent);
+            background: #20352e
+        }
+
+        .side-note {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 35px
+        }
+
+        main {
+            margin-left: 244px;
+            max-width: 1600px;
+            padding: 36px 5vw 70px
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .tools {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .tools button {
+            color: var(--ink);
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 6px
+        }
+
+        .hero {
+            padding: 65px 0 40px;
+            max-width: 900px
+        }
+
+        h1 {
+            font-size: clamp(36px, 4.3vw, 66px);
+            line-height: 1.12;
+            letter-spacing: -2px;
+            margin: 20px 0 24px;
+            font-weight: 700
+        }
+
+        h1 em {
+            font-style: normal;
+            color: var(--accent)
+        }
+
+        .eyebrow {
+            color: var(--accent);
+            font-size: 11px;
+            letter-spacing: 2px;
+            font-weight: 700
+        }
+
+        .lead {
+            font-size: 23px
+        }
+
+        .hero p {
+            max-width: 720px;
+            color: var(--muted)
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #10221c;
+            border: 0
+        }
+
+        .btn {
+            padding: 11px 18px;
+            margin-top: 14px
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin: 12px 0 32px
+        }
+
+        .stats div {
+            padding: 20px;
+            border-right: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .stats div:last-child {
+            border: 0
+        }
+
+        .stats b {
+            display: block;
+            font-size: 32px;
+            color: var(--ink)
+        }
+
+        .cardx {
+            padding: 28px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin: 22px 0
+        }
+
+        .cardx h3 {
+            font-size: 22px;
+            margin-bottom: 22px;
+            font-weight: 650
+        }
+
+        .cardx h4 {
+            font-size: 17px;
+            margin: 20px 0 10px;
+            color: var(--accent)
+        }
+
+        .cardx p:last-child {
+            margin-bottom: 0
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .tag {
+            display: inline-block;
+            background: #334631;
+            color: #dcf3b3;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 12px
+        }
+
+        h2 {
+            font-size: 42px;
+            letter-spacing: -1px;
+            margin: 10px 0
+        }
+
+        .page-heading {
+            padding: 36px 0 0
+        }
+
+        .table {
+            --bs-table-bg: transparent;
+            --bs-table-color: var(--ink);
+            --bs-table-border-color: var(--border);
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 0
+        }
+
+        .table th {
+            color: var(--accent);
+            font-weight: 600;
+            min-width: 110px;
+            vertical-align: top
+        }
+
+        .table td {
+            min-width: 130px;
+            vertical-align: top;
+            padding: 15px 12px
+        }
+
+        .table th {
+            padding: 12px
+        }
+
+        .table-responsive {
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            margin-bottom: 20px
+        }
+
+        code {
+            color: #c4e8ff
+        }
+
+        pre {
+            background: #0b151b;
+            border: 1px solid var(--border);
+            padding: 18px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            font-size: 12px;
+            color: #d3e7dd
+        }
+
+        ol.steps {
+            padding-left: 25px
+        }
+
+        .steps>li {
+            padding: 7px 0 20px 10px
+        }
+
+        .steps li::marker {
+            color: var(--accent);
+            font-weight: bold
+        }
+
+        .verify {
+            border-left: 3px solid var(--accent);
+            padding-left: 16px
+        }
+
+        .chart-wrap {
+            height: 220px;
+            max-width: 650px;
+            margin: 25px auto
+        }
+
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px
+        }
+
+        .shot {
+            min-height: 210px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #789296;
+            border-radius: 9px;
+            background: #101b22;
+            overflow: hidden
+        }
+
+        .shot img {
+            width: 100%;
+            height: auto
+        }
+
+        figcaption {
+            font-size: 13px;
+            padding: 10px 0
+        }
+
+        .upload {
+            font-size: 12px;
+            color: var(--accent)
+        }
+
+        input[type=file] {
+            display: block;
+            max-width: 100%;
+            margin-top: 8px
+        }
+
+        .form-control {
+            background: #0d181f;
+            color: white;
+            border-color: var(--border)
+        }
+
+        .form-control:focus {
+            background: #0d181f;
+            color: white
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px
+        }
+
+        .board>div {
+            background: #0f1c23;
+            border-radius: 8px;
+            padding: 16px
+        }
+
+        .board p {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px
+        }
+
+        .reference {
+            padding-left: 24px;
+            text-indent: -24px;
+            overflow-wrap: anywhere
+        }
+
+        .source {
+            max-height: 480px;
+            overflow: auto;
+            margin-top: 20px;
+            font-size: 12px
+        }
+
+        .page {
+            scroll-margin-top: 20px
+        }
+
+        .js .page {
+            display: none
+        }
+
+        .js .page.active {
+            display: block
+        }
+
+        footer {
+            margin-top: 45px;
+            font-size: 12px;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px
+        }
+
+        .datatable-input,
+        .datatable-selector {
+            background: #132029;
+            color: white;
+            border: 1px solid #52656d;
+            border-radius: 4px;
+            padding: 6px
+        }
+
+        .datatable-info,
+        .datatable-top,
+        .datatable-bottom {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .datatable-pagination a {
+            color: var(--ink)
+        }
+
+        .datatable-pagination .datatable-active a {
+            background: #314a40
+        }
+
+        noscript {
+            display: block;
+            padding: 20px;
+            background: #382f15
+        }
+
+        @media(max-width:900px) {
+            aside {
+                position: relative;
+                width: 100%;
+                padding: 18px
+            }
+
+            nav {
+                display: flex;
+                overflow: auto;
+                margin: 10px 0 0
+            }
+
+            nav a {
+                white-space: nowrap;
+                padding: 8px
+            }
+
+            nav a span,
+            .side-note {
+                display: none
+            }
+
+            .brand {
+                font-size: 25px
+            }
+
+            .brand small {
+                display: inline;
+                font-size: 9px;
+                margin-left: 15px
+            }
+
+            main {
+                margin: 0;
+                padding: 20px
+            }
+
+            .hero {
+                padding-top: 35px
+            }
+
+            .cardx {
+                padding: 18px
+            }
+
+            .board,
+            .evidence-grid {
+                grid-template-columns: 1fr
+            }
+
+            .stats div {
+                padding: 10px
+            }
+
+            .stats b {
+                font-size: 24px
+            }
+
+            .topbar {
+                align-items: flex-start
+            }
+        }
+
+        @media print {
+
+            aside,
+            .topbar,
+            .tools,
+            .upload,
+            footer {
+                display: none !important
+            }
+
+            main {
+                margin: 0;
+                padding: 0
+            }
+
+            .js .page {
+                display: block !important;
+                break-before: page
+            }
+
+            body {
+                background: white;
+                color: black;
+                font-size: 10pt
+            }
+
+            .cardx {
+                background: white;
+                border-color: #bbb;
+                break-inside: avoid;
+                color: black
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            .table th,
+            .table td,
+            p,
+            a,
+            .muted,
+            .eyebrow {
+                color: black !important
+            }
+
+            .table {
+                --bs-table-color: #000
+            }
+
+            .table-responsive {
+                overflow: visible
+            }
+
+            pre {
+                background: #eee;
+                color: black
+            }
+
+            .hero {
+                padding: 0
+            }
+
+            details {
+                display: none
+            }
+
+            .chart-wrap {
+                display: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="skip" href="#main">Saltar al contenido</a>
+    <aside>
+        <div class="brand">GEA<small>QUALITY & DELIVERY</small></div>
+        <nav aria-label="Navegación de las ocho páginas"><a href="#inicio"><span>01</span>Inicio</a><a
+                href="#calidad"><span>02</span>Calidad</a><a href="#pruebas"><span>03</span>Pruebas</a><a
+                href="#configuracion"><span>04</span>Configuración</a><a
+                href="#despliegue"><span>05</span>Despliegue</a><a href="#soporte"><span>06</span>Soporte</a><a
+                href="#documentacion"><span>07</span>Documentación</a><a
+                href="#referencias"><span>08</span>Referencias</a></nav>
+        <p class="side-note">Ingeniería de Requisitos<br>Juan Sebastián Morales Delgado<br>Grupo 7<br><br>Plan académico
+            aplicado<br>Versión documental 1.0</p>
+    </aside>
+    <main id="main">
+        <div class="topbar"><span>PROPENSIONES ABOGADOS / PLAN DE CALIDAD</span>
+            <div class="tools"><button id="printBtn">Imprimir</button><button id="exportBtn">Descargar HTML
+                    actualizado</button></div>
+        </div><noscript>JavaScript está deshabilitado. Todas las secciones permanecen visibles; las tablas y el
+            contenido se pueden leer.</noscript>
+        <section id="inicio" class="page" aria-labelledby="title-inicio">
+            <div class="hero"><span class="eyebrow">INGENIERÍA DE REQUISITOS · GRUPO 7</span>
+                <h1>Calidad que se demuestra.<br><em>Despliegue que se controla.</em></h1>
+                <p class="lead">GEA · Gestión Estratégica de Activos</p>
+                <p>Plan de calidad, pruebas, configuración y operación de GEA para Propensiones Abogados.</p>
+                <a class="btn btn-primary" href="#calidad">Explorar el plan →</a> <a class="btn btn-outline-light"
+                    href="#pruebas">Ver casos de prueba</a>
+            </div>
+            <div class="stats">
+                <div><b>03</b>Características</div>
+                <div><b>03</b>Métricas</div>
+                <div><b>05</b>Casos de prueba</div>
+                <div><b>08</b>Secciones</div>
+            </div>
+            <article class="cardx">
+                <h3>El proyecto</h3>
+                <p>GEA gestiona activos históricos, órdenes de compra por etapas y certificación documental. Incluye
+                    verificación de certificados, comparación SHA-256 y acceso según rol y titularidad.</p>
+                <p><b>Plataforma:</b> Python 3.11+, Django 5.2 LTS, MariaDB, Redis, Git, cPanel y Passenger.
+                    Dependencias: <code>requirements.txt</code> y <code>uv.lock</code>.</p>
+            </article>
+            <article class="cardx">
+                <h3>Responsabilidad del equipo</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Integrante</th>
+                                <th>Páginas asignadas</th>
+                                <th>Responsabilidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Juan Sebastián Morales Delgado</td>
+                                <td>Inicio, Calidad, Pruebas, Configuración, Despliegue, Soporte, Documentación y
+                                    Referencias</td>
+                                <td>Análisis, elaboración del plan, revisión técnica y consolidación de evidencias.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="muted">Grupo 7, según la indicación de la actividad.</p>
+            </article>
+            <article class="cardx">
+                <h3>Alcance y estado de la entrega</h3>
+                <p><span class="tag">Estado con evidencia</span> Calidad incluye el último informe local disponible
+                    y resultados de protección en producción reportados por el equipo. La suite aún tiene fallos y
+                    errores abiertos. Las capturas reales se incorporan en Despliegue. Ramas, SLA y entornos son
+                    propuestas.</p>
+            </article>
+        </section>
+        <section id="calidad" class="page" aria-labelledby="title-calidad">
+            <div class="page-heading"><span class="eyebrow">GEA / 02</span>
+                <h2 id="title-calidad">Calidad</h2>
+            </div>
+            <article class="cardx">
+                <h3>01 · Modelo de calidad</h3>
+                <h3>ISO/IEC 25010:2023</h3>
+                <p><i>Systems and software engineering — Systems and software Quality Requirements and Evaluation
+                        (SQuaRE) — Product quality model.</i> Segunda edición, publicada en noviembre de 2023.</p>
+                <p>Se elige porque define un modelo de características para especificar y evaluar la calidad de
+                    productos de software. La selección orienta esta evaluación; no significa que GEA esté certificada
+                    ni que cumpla por completo la norma (International Organization for Standardization [ISO], 2023).</p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Característica del modelo</th>
+                                <th>Relevancia para GEA</th>
+                                <th>Funcionalidad o módulo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Adecuación funcional</td>
+                                <td>Las etapas comerciales y la verificación documental deben producir resultados
+                                    correctos y auditables.</td>
+                                <td>Órdenes de compra (buyers); certificación y comparación SHA-256 (certificates /
+                                    code_gen).</td>
+                            </tr>
+                            <tr>
+                                <td>Seguridad</td>
+                                <td>GEA almacena documentos y datos personales que requieren aislamiento entre
+                                    titulares.</td>
+                                <td>Acceso TOTP, historial del tenedor y entrega protegida de certificados.</td>
+                            </tr>
+                            <tr>
+                                <td>Mantenibilidad</td>
+                                <td>Las pruebas y la cobertura permiten conocer cuánto código queda ejercitado al
+                                    modificar el sistema y localizar módulos que necesitan más verificación.</td>
+                                <td>Suite Django, `app_core/settings_test.py` e informe generado por
+                                    <code>python manage.py test_report</code>.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Las tres características se relacionan con las mediciones M-01 a M-03. Se informa por separado el
+                    resultado observado y el umbral de aceptación; los resultados no sustituyen la evaluación completa
+                    del producto.</p>
+            </article>
+            <article class="cardx">
+                <h3>02 · Tres métricas de aceptación</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID / métrica</th>
+                                <th>Característica</th>
+                                <th>Cómo se mide</th>
+                                <th>Herramienta</th>
+                                <th>Umbral</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>M-01 · Pruebas ejecutadas sin fallo</td>
+                                <td>Adecuación funcional</td>
+                                <td>(Aprobadas / (aprobadas + fallidas + con error)) × 100; se excluyen las
+                                    omitidas. Del informe: 1.140 / (1.140 + 2 + 7) × 100 = <b>99,22 %</b>.</td>
+                                <td>Django test runner, `python manage.py test_report`; artefacto
+                                    <code>test_report.txt</code>.</td>
+                                <td>≥ 99 % y cero fallos o errores pendientes de resolver. Observado: 99,22 %, pero
+                                    quedan 2 fallos y 7 errores; <b>no cumple</b> la condición completa.</td>
+                            </tr>
+                            <tr>
+                                <td>M-02 · Archivos sensibles servidos por URL estática</td>
+                                <td>Seguridad</td>
+                                <td>Contar respuestas HTTP distintas de 404 al solicitar archivos bajo
+                                    <code>certificates/</code>, <code>passport_images/</code> y
+                                    <code>signature_images/</code> desde el servidor estático. Resultado informado:
+                                    <b>0 archivos servidos</b>; las rutas de comprobación devolvieron 404.</td>
+                                <td><code>python manage.py check_media --http</code> y petición HTTP al dominio de
+                                    producción.</td>
+                                <td>0 respuestas con archivo; 404 en todas las rutas sensibles probadas. Resultado
+                                    reportado por el equipo en producción.</td>
+                            </tr>
+                            <tr>
+                                <td>M-03 · Cobertura de sentencias</td>
+                                <td>Mantenibilidad</td>
+                                <td>(Sentencias ejecutadas / sentencias medibles) × 100. Resultado del informe:
+                                    10.407 / 14.151 × 100 = <b>73,5 %</b>.</td>
+                                <td><code>coverage</code> mediante <code>python manage.py test_report</code>; excluye
+                                    pruebas, migraciones y ajustes de pruebas.</td>
+                                <td>≥ 70 %. Observado: <b>73,5 %</b> (cumple el umbral numérico).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Fuente de M-01 y M-03: informe local existente <code>test_report.txt</code>. No es una ejecución
+                    nueva. M-02 corresponde a la salida de producción reportada por el equipo; conservar captura
+                    fechada de la terminal como respaldo de auditoría.</p>
+                <div class="chart-wrap"><canvas id="metricChart"
+                        aria-label="Resultados porcentuales de M-01 pruebas aprobadas y M-03 cobertura"></canvas></div>
+                <p class="muted">El gráfico muestra M-01 y M-03. M-02 se mide como cantidad de archivos servidos;
+                    el objetivo es cero.</p>
+                <details>
+                    <summary>Evidencia concreta del informe de pruebas</summary>
+                    <pre><code>1.156 pruebas en 120,8 s
+1.140 pasan · 2 fallan · 7 con error · 7 saltadas
+Cobertura: 73,5 % (10.407 / 14.151 sentencias)
+
+Fallos informados:
+test_history_tree.py::HistoryTreeTestCase.test_una_rama_sube_cuando_se_le_emite_un_codigo_nuevo
+test_ops.py::AllowlistTests.test_every_installed_command_has_been_decided_on
+(comando sin clasificar: debugsqlshell)
+
+Errores informados:
+7 pruebas de resumen: namespace 'djdt' no registrado</code></pre>
+                    <p>La salida es del archivo <code>test_report.txt</code> existente en el repositorio al preparar
+                        esta entrega. Las pruebas con error deben corregirse o explicarse antes de afirmar que la suite
+                        está aprobada.</p>
+                </details>
+                <details>
+                    <summary>Evidencia de protección de archivos en producción</summary>
+                    <pre><code>Comando reportado: python manage.py check_media --http
+Resultado reportado: HTTP 404 para el archivo de certificados
+Subárboles con .htaccess propio: certificates/, passport_images/, signature_images/</code></pre>
+                    <p>Este bloque resume la salida facilitada por el equipo; no es una captura original de SSH.
+                        Insertar junto a él la captura de la terminal de producción, con fecha visible y sin secretos,
+                        cuando esté disponible.</p>
+                </details>
+            </article>
+        </section>
+        <section id="pruebas" class="page" aria-labelledby="title-pruebas">
+            <div class="page-heading"><span class="eyebrow">GEA / 03</span>
+                <h2 id="title-pruebas">Pruebas</h2>
+            </div>
+            <article class="cardx">
+                <h3>03a · Exactamente tres tipos de prueba</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Qué se prueba en GEA</th>
+                                <th>Herramienta o técnica</th>
+                                <th>Responsable</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Unitarias</td>
+                                <td>Estado derivado y reglas mark_* de órdenes. El repositorio también prueba helpers de
+                                    límites y validadores.</td>
+                                <td>Django TestCase, fixtures y aserciones directas. Se clasifican por alcance, no solo
+                                    por la clase base.</td>
+                                <td>Juan Sebastián Morales Delgado</td>
+                            </tr>
+                            <tr>
+                                <td>Integración</td>
+                                <td>Restricciones ORM/base de datos y rutas autenticadas de certificados. Incluye
+                                    verificaciones de seguridad de autorización.</td>
+                                <td>Django Client, TestCase y transacciones; repetición sobre MariaDB de pruebas para
+                                    confirmar paridad.</td>
+                                <td>Juan Sebastián Morales Delgado</td>
+                            </tr>
+                            <tr>
+                                <td>Carga</td>
+                                <td>Consultas autorizadas bajo concurrencia según RNF-02.</td>
+                                <td>Apache JMeter; escenario propuesto, separado de la suite existente.</td>
+                                <td>Juan Sebastián Morales Delgado</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+            <article class="cardx">
+                <h3>03b · Exactamente cinco casos</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Funcionalidad / requisito</th>
+                                <th>Tipo</th>
+                                <th>Precondiciones</th>
+                                <th>Pasos y datos de entrada</th>
+                                <th>Resultado esperado / fuente</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CP-01</td>
+                                <td>Flujo de órdenes · estado derivado</td>
+                                <td>Unitarias</td>
+                                <td>Fixture make_offer() y usuario staff de OfferFixtureMixin.</td>
+                                <td>1. Crear orden con make_offer(). 2. Leer status_code sin completar etapas.</td>
+                                <td>status_code = Status.PENDING_APPROVAL. <a target="_blank" rel="noopener"
+                                        href="https://github.com/sebasmd-projects/gea_module_0/blob/5be1ed914df1a2764b2ae238e9ff252d1ea937c8/apps/project/specific/assets_management/buyers/tests/test_workflow.py"><code>TestTheStateIsDerived.test_a_fresh_order_is_pending</code></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CP-02</td>
+                                <td>RF-02 · No saltar etapas</td>
+                                <td>Unitarias</td>
+                                <td>Orden aprobada mediante approve(make_offer()); orden de servicio aún no enviada.
+                                </td>
+                                <td>1. Invocar mark_payment_order_created(self.staff). 2. Capturar la excepción.</td>
+                                <td>ValidationError; se rechaza crear la orden de pago antes de enviar la orden de
+                                    servicio. <a target="_blank" rel="noopener"
+                                        href="https://github.com/sebasmd-projects/gea_module_0/blob/5be1ed914df1a2764b2ae238e9ff252d1ea937c8/apps/project/specific/assets_management/buyers/tests/test_workflow.py"><code>TestTheStagesCannotBeSkipped.test_a_payment_order_needs_the_service_order_sent</code></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CP-03</td>
+                                <td>RF-02 · Integridad en base de datos</td>
+                                <td>Integración</td>
+                                <td>Orden aprobada; servicio sin enviar; base de pruebas con migraciones aplicadas.</td>
+                                <td>1. Abrir transaction.atomic(). 2. Actualizar payment_order_created_at con
+                                    QuerySet.update(), sin pasar por save().</td>
+                                <td>La base rechaza la escritura con IntegrityError; no admite el estado inválido. <a
+                                        target="_blank" rel="noopener"
+                                        href="https://github.com/sebasmd-projects/gea_module_0/blob/5be1ed914df1a2764b2ae238e9ff252d1ea937c8/apps/project/specific/assets_management/buyers/tests/test_workflow.py"><code>TestTheDatabaseIsTheLastLine.test_it_refuses_a_payment_order_before_the_service_order_is_sent</code></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CP-04</td>
+                                <td>RF-08 · Aislamiento entre titulares</td>
+                                <td>Integración</td>
+                                <td>Fixtures ana, beto, codigo_ana, codigo_beto y cliente Django del módulo
+                                    test_holder_history.</td>
+                                <td>1. Autenticar ana. 2. Abrir su propio código. 3. Abrir código de beto. 4. Buscar Oro
+                                    de Beto en historial.</td>
+                                <td>Tres controles: propio HTTP 200; ajeno HTTP 404; búsqueda code_count = 0 y sin
+                                    PAYLOAD-BETO. <a target="_blank" rel="noopener"
+                                        href="https://github.com/sebasmd-projects/gea_module_0/blob/5be1ed914df1a2764b2ae238e9ff252d1ea937c8/apps/project/specific/internal/code_gen/tests/test_holder_history.py"><code>TestAHolderSeesOnlyTheirOwn</code></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CP-05</td>
+                                <td>RNF-02 · Consulta concurrente</td>
+                                <td>Carga</td>
+                                <td>Entorno aislado equivalente a V2; MariaDB/Redis; 50 sesiones autorizadas; datos
+                                    sintéticos y permiso para carga.</td>
+                                <td>1. JMeter: 50 hilos, rampa 60 s y carga estable 300 s. 2. Consultar certificado
+                                    autorizado. 3. Guardar JTL y validar contenido.</td>
+                                <td>p95 ≤ 3.000 ms en carga estable; 0 errores de consulta; respuestas con contenido
+                                    esperado. Caso propuesto: no se encontró un script de carga en la inspección
+                                    realizada.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+            <article class="cardx">
+                <h3>03c · Exactamente tres criterios de aceptación</h3>
+                <ol class="steps">
+                    <li>CA-01: M-01 ≥ 99 % y cero pruebas fallidas o con error pendientes de resolver en la ejecución
+                        candidata.</li>
+                    <li>CA-02: M-02 = 0 archivos sensibles servidos por URL estática; las rutas probadas responden
+                        HTTP 404.</li>
+                    <li>CA-03: M-03 ≥ 70 % de cobertura de sentencias en el informe de la versión candidata.</li>
+                </ol>
+            </article>
+            <article class="cardx">
+                <h3>Trazabilidad y ejecución</h3>
+                <p>Inspección estática de <a
+                        href="https://github.com/sebasmd-projects/gea_module_0/tree/5be1ed914df1a2764b2ae238e9ff252d1ea937c8"
+                        target="_blank" rel="noopener"><code>master</code> en
+                        <code>5be1ed914df1a2764b2ae238e9ff252d1ea937c8</code></a>. CP-01 a CP-04 corresponden a pruebas
+                    existentes; CP-05 es propuesto. La suite está pendiente de ejecución.</p>
+                <pre><code>uv run python manage.py test --settings=app_core.settings_test</code></pre>
+                <p>La suite usa SQLite en memoria. Repetir las restricciones en MariaDB aislada; conservar informe,
+                    entorno y commit. No ejecutar contra producción.</p>
+                <pre><code>uv run python manage.py test_report</code></pre>
+                <p><code>test_report</code> y su resumen están descritos en README.</p>
+            </article>
+        </section>
+        <section id="configuracion" class="page" aria-labelledby="title-configuracion">
+            <div class="page-heading"><span class="eyebrow">GEA / 04</span>
+                <h2 id="title-configuracion">Configuración</h2>
+            </div>
+            <article class="cardx">
+                <h3>04a · Versionado</h3>
+                <p><b>SemVer MAYOR.MENOR.PARCHE</b>. Versión candidata propuesta: <code>1.0.0</code>. MAYOR: cambio
+                    incompatible, por ejemplo modificar el contrato de verificación pública; MENOR: nueva función
+                    compatible, como un filtro adicional en inventario; PARCHE: corrección compatible, como un error en
+                    el formato de una fecha. Etiqueta candidata; pendiente de aprobación.</p>
+                <p>La línea base incluye commit, etiqueta, requirements.txt, uv.lock, migraciones, configuración sin
+                    secretos, informe de pruebas y manifiesto de despliegue. Los secretos se conservan fuera de Git.</p>
+            </article>
+            <article class="cardx">
+                <h3>04b · Repositorio y ramas</h3>
+                <p>Git con GitHub. Repositorio identificado en los adjuntos: <a
+                        href="https://github.com/sebasmd-projects/gea_module_0" target="_blank"
+                        rel="noopener">sebasmd-projects/gea_module_0</a>. Repositorio público; rama
+                    principal master.</p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Rama propuesta</th>
+                                <th>Propósito</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>master</td>
+                                <td>Código autorizado para producción; solo cambios revisados y etiquetados.</td>
+                            </tr>
+                            <tr>
+                                <td>develop</td>
+                                <td>Integración del trabajo que se despliega en pruebas.</td>
+                            </tr>
+                            <tr>
+                                <td>feature/*</td>
+                                <td>Una función o corrección por rama; revisión mediante pull request antes de integrar.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+            <article class="cardx">
+                <h3>04c · Tres entornos</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Entorno</th>
+                                <th>Propósito</th>
+                                <th>Dónde se ejecuta</th>
+                                <th>Quién tiene acceso</th>
+                                <th>Rama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Desarrollo</td>
+                                <td>Implementar y ejecutar pruebas rápidas.</td>
+                                <td>Equipo local; uv, Python y datos sintéticos; SQLite para suite existente.</td>
+                                <td>Desarrollador identificado.</td>
+                                <td>feature/*</td>
+                            </tr>
+                            <tr>
+                                <td>Pruebas</td>
+                                <td>Validar migraciones, autorización y carga.</td>
+                                <td>Aplicación cPanel independiente con base MariaDB, Redis y SMTP de pruebas; si V2 no
+                                    permite aislamiento y carga, usar instancia temporal equivalente.</td>
+                                <td>QA y responsable técnico.</td>
+                                <td>develop</td>
+                            </tr>
+                            <tr>
+                                <td>Producción</td>
+                                <td>Servicio real para tenedores, compradores y verificadores.</td>
+                                <td>Conexcol V2 con cPanel/Passenger; MariaDB; Redis habilitado y comprobado.</td>
+                                <td>Público según permisos; administración restringida.</td>
+                                <td>master + tag aprobado</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Mantener entornos y bases separados; usar datos sintéticos en pruebas.</p>
+            </article>
+            <article class="cardx">
+                <h3>04d · Control de cambios</h3>
+                <ol class="steps">
+                    <li><b>Solicitud — solicitante:</b> registrar SC con necesidad, requisito y criterio verificable.
+                    </li>
+                    <li><b>Evaluación — responsable técnico (Juan Sebastián):</b> estimar impacto en permisos, datos,
+                        migraciones, costo y plazo.</li>
+                    <li><b>Aprobación — responsable funcional designado por Propensiones:</b> aceptar alcance y
+                        prioridad; registrar decisión antes de implementar.</li>
+                    <li><b>Implementación — desarrollador (Juan Sebastián):</b> crear feature/*, modificar código,
+                        actualizar documentación y abrir PR.</li>
+                    <li><b>Verificación — QA (Juan Sebastián):</b> ejecutar casos afectados, revisar evidencias y
+                        registrar aceptación; solicitar revisión funcional cuando corresponda.</li>
+                </ol>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Campo de solicitud</th>
+                                <th>Contenido requerido</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ID</td>
+                                <td>SC-AAAA-NNN</td>
+                            </tr>
+                            <tr>
+                                <td>Fecha</td>
+                                <td>Fecha y hora con zona</td>
+                            </tr>
+                            <tr>
+                                <td>Solicitante</td>
+                                <td>Nombre y rol</td>
+                            </tr>
+                            <tr>
+                                <td>Descripción</td>
+                                <td>Problema y cambio solicitado</td>
+                            </tr>
+                            <tr>
+                                <td>Requisito afectado</td>
+                                <td>RF/RNF y criterio de aceptación</td>
+                            </tr>
+                            <tr>
+                                <td>Impacto</td>
+                                <td>Datos, seguridad, compatibilidad, esfuerzo y plazo</td>
+                            </tr>
+                            <tr>
+                                <td>Decisión y responsable</td>
+                                <td>Aprobación o rechazo, motivo y fecha</td>
+                            </tr>
+                            <tr>
+                                <td>Estado / trazabilidad</td>
+                                <td>Solicitado → evaluado → aprobado → implementado → verificado; issue, PR, commit y
+                                    tag</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Revisión semanal del tablero. Hitos relativos al cierre T: T−7 entorno, T−3 pruebas, T−1 evidencias y
+                    versión candidata, T publicación.</p>
+            </article>
+        </section>
+        <section id="despliegue" class="page" aria-labelledby="title-despliegue">
+            <div class="page-heading"><span class="eyebrow">GEA / 05</span>
+                <h2 id="title-despliegue">Despliegue</h2>
+            </div>
+            <article class="cardx">
+                <h3>05a · Entorno y requisitos</h3>
+                <p>
+                    <b>Destino planificado: Conexcol V2 — cPanel, LiteSpeed y Passenger.</b>
+                </p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Categoría</th>
+                                <th>Requisito</th>
+                                <th>Valor mínimo / configuración objetivo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Hardware</td>
+                                <td>Recursos</td>
+                                <td>2 GB RAM, 1 vCPU y 40 GB de disco; reservar espacio para aplicación, estáticos,
+                                    media y respaldos.</td>
+                            </tr>
+                            <tr>
+                                <td>Software</td>
+                                <td>Aplicación</td>
+                                <td>Python 3.11 compatible con <code>requirements.txt</code>; cPanel con aplicación
+                                    Python y Passenger.</td>
+                            </tr>
+                            <tr>
+                                <td>Datos</td>
+                                <td>Base de datos</td>
+                                <td>MariaDB 11.4 LTS; base y usuario de aplicación independientes.</td>
+                            </tr>
+                            <tr>
+                                <td>Servicios</td>
+                                <td>Caché</td>
+                                <td>Redis autenticado, aislado por entorno; <code>check_cache</code> satisfactorio.</td>
+                            </tr>
+                            <tr>
+                                <td>Red y operación</td>
+                                <td>Publicación</td>
+                                <td>HTTPS/443 con certificado válido. Límites V2: NPROC 100, transferencia 1 TB/mes, EP
+                                    40 para PHP; correo 100/h y 30 errores/h.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </article>
+            <article class="cardx">
+                <h3>05b · Instalación en ocho pasos</h3>
+                <p>Comandos basados en la guía aportada. Los valores entre &lt;…&gt; se sustituyen por los reales.
+                    Ejecutar comandos de gestión desde la raíz de GEA y con el virtualenv de cPanel activo.</p>
+                <ol class="steps">
+                    <li>
+                        <h4>Preparar versión y respaldo</h4>
+                        <p>En local: ejecutar suite y controles; exportar dependencias de producción. Guardar commit
+                            previo y respaldo cifrado de base, media y configuración.</p>
+                        <pre><code>uv run python manage.py test --settings=app_core.settings_test
+uv export --no-dev --format=requirements-txt &gt; requirements.txt
+uv run python manage.py check_requirements</code></pre>
+                        <p class="verify"><b>Verificación:</b> Suite sin fallos; export actualizado; respaldo y
+                            restauración de prueba verificados.</p>
+                    </li>
+                    <li>
+                        <h4>Crear la aplicación Python</h4>
+                        <p>En cPanel, habilitar aplicación Python 3.11, raíz fuera de public_html, URL de GEA y archivo
+                            de inicio passenger_wsgi.py. Activar por SSH el virtualenv que cPanel indique.</p>
+                        <pre><code>python --version
+python -m pip --version</code></pre>
+                        <p class="verify"><b>Verificación:</b> Python y pip pertenecen al virtualenv correcto. La
+                            ubicación exacta depende de la cuenta cPanel.</p>
+                    </li>
+                    <li>
+                        <h4>Obtener la versión candidata</h4>
+                        <p>Clonar el repositorio si no existe y seleccionar el tag aprobado. No ejecutar git pull sobre
+                            una release sin registrar versión.</p>
+                        <pre><code>git clone https://github.com/sebasmd-projects/gea_module_0.git
+cd gea_module_0
+git checkout &lt;TAG_APROBADO&gt;
+python -m pip install -r requirements.txt</code></pre>
+                        <p class="verify"><b>Verificación:</b> HEAD coincide con el commit aprobado; pip termina sin
+                            errores. Sustituir TAG_APROBADO por la etiqueta real.</p>
+                    </li>
+                    <li>
+                        <h4>Configurar datos y secretos</h4>
+                        <p>Crear base y usuario MariaDB en cPanel, asignar privilegios a esa base. Cargar variables de
+                            docs/env.example mediante el mecanismo privado de producción.</p>
+                        <pre><code>DJANGO_DEBUG=False
+DB_ENGINE=django.db.backends.mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306</code></pre>
+                        <p class="verify"><b>Verificación:</b> Variables completas, host autorizado y directorios
+                            logs/public/media/public/static creados. FIELD_ENCRYPTION_KEY preservada; no incluir
+                            secretos en capturas.</p>
+                    </li>
+                    <li>
+                        <h4>Conectar WSGI y Redis</h4>
+                        <p>En passenger_wsgi.py enlazar la aplicación WSGI del proyecto. Configurar REDIS_URL con la
+                            conexión facilitada por el proveedor; usar TLS si la conexión es remota.</p>
+                        <pre><code>from app_core.wsgi import application
+# comprobación desde la terminal del virtualenv:
+# python manage.py check_cache</code></pre>
+                        <p class="verify"><b>Verificación:</b> Passenger puede importar application y check_cache
+                            confirma conexión; no usar LocMemCache como sustituto del control compartido en producción.
+                        </p>
+                    </li>
+                    <li>
+                        <h4>Migrar y recoger recursos</h4>
+                        <p>Ejecutar en el entorno activo. Si es primera instalación, crear personal autorizado y
+                            configurar TOTP mediante el flujo documentado.</p>
+                        <pre><code>python manage.py migrate
+python manage.py collectstatic --noinput
+python manage.py showmigrations</code></pre>
+                        <p class="verify"><b>Verificación:</b> Migraciones aplicadas marcadas [X]; collectstatic sin
+                            errores; recursos publicados accesibles.</p>
+                    </li>
+                    <li>
+                        <h4>Proteger archivos y programar tareas</h4>
+                        <p>Copiar reglas documentadas a media y a carpetas certificates, passport_images,
+                            signature_images y pqrs. Añadir cron sin duplicarlo y revisar seguridad.</p>
+                        <pre><code>python manage.py crontab add
+python manage.py check_cron
+python manage.py check --deploy
+python manage.py check_security
+python manage.py check_requirements</code></pre>
+                        <p class="verify"><b>Verificación:</b> Acceso directo a documento protegido devuelve 404; cron
+                            instalado; controles sin fallos bloqueantes ni advertencias de seguridad sin resolver.</p>
+                    </li>
+                    <li>
+                        <h4>Publicar y comprobar</h4>
+                        <p>Crear tmp si no existe, reiniciar Passenger y verificar aplicación por HTTPS. Ejecutar CP-01
+                            a CP-04 como smoke test sobre datos autorizados de prueba; carga solo en entorno aislado.
+                        </p>
+                        <pre><code>mkdir -p tmp
+touch tmp/restart.txt
+python manage.py check_health --http</code></pre>
+                        <p class="verify"><b>Verificación:</b> HTTP de salud correcto; BD, caché y correo operativos;
+                            estáticos visibles; acceso y aislamiento correctos. Registrar tag, fecha, ejecutor y
+                            capturas.</p>
+                    </li>
+                </ol>
+            </article>
+            <article class="cardx">
+                <h3>05c · Plan de reversión</h3>
+                <ol class="steps">
+                    <li><b>Contener:</b> detener la publicación si fallan salud, migraciones, autorización o smoke
+                        tests; conservar logs y suspender escrituras.</li>
+                    <li><b>Restaurar:</b> volver al commit/tag previo con sus dependencias y configuración. Si el
+                        esquema cambió de forma incompatible, restaurar la copia consistente de base y media; no
+                        revertir migraciones a ciegas.</li>
+                    <li><b>Verificar y reactivar:</b> ejecutar <code>collectstatic</code>, reiniciar Passenger, validar
+                        salud, datos y acceso a certificados; registrar versión, duración e impacto antes de reabrir.
+                    </li>
+                </ol>
+            </article>
+            <article class="cardx">
+                <h3>05d · Evidencia del software funcionando</h3>
+                <p>Se requieren dos capturas reales; no fueron aportadas. Selecciónalas aquí y pulsa <b>Descargar HTML
+                        actualizado</b>: las imágenes quedarán incrustadas en el archivo, sin archivos auxiliares.
+                    Recorta u oculta datos personales antes de incorporarlas.</p>
+                <div class="evidence-grid">
+                    <figure>
+                        <div class="shot"><img id="shot1"
+                                alt="1. GEA instalado: catálogo o inventario visible, con URL y contexto del entorno."
+                                hidden><span id="empty1">Captura real pendiente</span></div>
+                        <figcaption>1. GEA instalado: catálogo o inventario visible, con URL y contexto del entorno.
+                        </figcaption><label class="upload">Incorporar captura <input type="file"
+                                accept="image/png,image/jpeg,image/webp" data-shot="1"></label>
+                    </figure>
+                    <figure>
+                        <div class="shot"><img id="shot2"
+                                alt="2. Función operativa: línea de tiempo de una orden o verificación documental con datos sintéticos."
+                                hidden><span id="empty2">Captura real pendiente</span></div>
+                        <figcaption>2. Función operativa: línea de tiempo de una orden o verificación documental con
+                            datos sintéticos.</figcaption><label class="upload">Incorporar captura <input type="file"
+                                accept="image/png,image/jpeg,image/webp" data-shot="2"></label>
+                    </figure>
+                </div>
+                <p>Registrar en cada captura entorno, versión y fecha mediante el campo siguiente.</p><textarea
+                    id="evidenceNote" class="form-control"
+                    placeholder="Entorno · versión/commit · fecha · autor de las capturas"></textarea>
+            </article>
+        </section>
+        <section id="soporte" class="page" aria-labelledby="title-soporte">
+            <div class="page-heading"><span class="eyebrow">GEA / 06</span>
+                <h2 id="title-soporte">Soporte</h2>
+            </div>
+            <article class="cardx">
+                <h3>06a · Canal y formato</h3>
+                <p><b>Canal propuesto:</b> GitHub Issues del repositorio GEA para reportes sin datos sensibles,
+                    habilitado por el administrador. Incidencias con documentos o datos personales se atienden por un
+                    canal privado autorizado por Propensiones; nunca adjuntar pasaportes, credenciales o certificados
+                    reales al issue público.</p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Campo</th>
+                                <th>Dato solicitado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ID / fecha</td>
+                                <td>INC-AAAA-NNN; fecha y zona horaria</td>
+                            </tr>
+                            <tr>
+                                <td>Reportante</td>
+                                <td>Rol y contacto por canal privado</td>
+                            </tr>
+                            <tr>
+                                <td>Entorno y versión</td>
+                                <td>Desarrollo/pruebas/producción; tag y commit</td>
+                            </tr>
+                            <tr>
+                                <td>Módulo y resumen</td>
+                                <td>Ej.: certificados, consulta no disponible</td>
+                            </tr>
+                            <tr>
+                                <td>Reproducción</td>
+                                <td>Precondiciones, pasos y datos sintéticos</td>
+                            </tr>
+                            <tr>
+                                <td>Esperado / observado</td>
+                                <td>Respuesta esperada frente al error real</td>
+                            </tr>
+                            <tr>
+                                <td>Severidad / impacto</td>
+                                <td>Usuarios afectados, alcance y alternativa temporal</td>
+                            </tr>
+                            <tr>
+                                <td>Evidencia / seguimiento</td>
+                                <td>Captura anonimizada, log sin secretos, responsable, estado y solución</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+            <article class="cardx">
+                <h3>06b · Cuatro niveles de severidad</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nivel</th>
+                                <th>Ejemplo en GEA</th>
+                                <th>Respuesta máxima</th>
+                                <th>Solución máxima</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Crítico</td>
+                                <td>Exposición de certificados ajenos o caída total del acceso.</td>
+                                <td>1 h</td>
+                                <td>8 h</td>
+                            </tr>
+                            <tr>
+                                <td>Alto</td>
+                                <td>No se pueden aprobar órdenes o emitir certificados, sin alternativa segura.</td>
+                                <td>4 h</td>
+                                <td>24 h</td>
+                            </tr>
+                            <tr>
+                                <td>Medio</td>
+                                <td>Una notificación comercial falla, con orden persistida y consulta disponible.</td>
+                                <td>8 h</td>
+                                <td>72 h</td>
+                            </tr>
+                            <tr>
+                                <td>Bajo</td>
+                                <td>Desalineación visual de una etiqueta sin pérdida de funcionalidad.</td>
+                                <td>24 h</td>
+                                <td>168 h</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>SLA propuestos en horas corridas desde el registro. Deben acordarse con la organización y contar con
+                    cobertura suficiente; no se presentan como compromisos ya contratados. La respuesta inicia
+                    diagnóstico y contención; la solución requiere validación y cierre.</p>
+            </article>
+            <article class="cardx">
+                <h3>06c · Ciclo de mantenimiento</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Frecuencia</th>
+                                <th>Disparador</th>
+                                <th>Responsable</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Correctivo</td>
+                                <td>Revisión diaria de incidencias; atención según severidad.</td>
+                                <td>Fallo reproducible, caída de salud, error de autorización o regresión.</td>
+                                <td>Juan Sebastián Morales Delgado; validación funcional del responsable designado.</td>
+                            </tr>
+                            <tr>
+                                <td>Evolutivo</td>
+                                <td>Revisión mensual y entrega planificada tras aprobación.</td>
+                                <td>Solicitud de cambio aprobada: nuevo filtro de inventario, mejora del flujo o
+                                    necesidad regulatoria.</td>
+                                <td>Juan Sebastián Morales Delgado; priorización por Propensiones.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Seguimiento: chequeo de salud cada 3 minutos mediante monitor autorizado, revisión de logs diarios y
+                    de cron; control mensual de recursos V2 y correo. Tras cada entrega: observar fallos y latencias,
+                    revisar tickets y comprobar respaldo mediante restauración aislada. El cierre requiere reproducir el
+                    escenario corregido y registrar versión de solución.</p>
+            </article>
+        </section>
+        <section id="documentacion" class="page" aria-labelledby="title-documentacion">
+            <div class="page-heading"><span class="eyebrow">GEA / 07</span>
+                <h2 id="title-documentacion">Documentación</h2>
+            </div>
+            <article class="cardx">
+                <h3>07 · Cinco artefactos del proyecto</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Artefacto</th>
+                                <th>Herramienta / formato</th>
+                                <th>Propósito</th>
+                                <th>Audiencia</th>
+                                <th>Evidencia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>README</td>
+                                <td>Markdown / muestra HTML</td>
+                                <td>Identificar GEA, dependencias y arranque.</td>
+                                <td>Desarrolladores y operación</td>
+                                <td><a href="https://github.com/sebasmd-projects/gea_module_0/blob/5be1ed914df1a2764b2ae238e9ff252d1ea937c8/README.md"
+                                        target="_blank" rel="noopener">README real del repositorio</a></td>
+                            </tr>
+                            <tr>
+                                <td>CHANGELOG</td>
+                                <td>Markdown / muestra HTML</td>
+                                <td>Registrar cambios y su fuente sin inventar releases.</td>
+                                <td>QA, operación y responsables funcionales</td>
+                                <td><a href="#doc-changelog">Bitácora documental sin etiqueta de release</a></td>
+                            </tr>
+                            <tr>
+                                <td>Manual de usuario</td>
+                                <td>HTML</td>
+                                <td>Guiar consulta, órdenes y verificación.</td>
+                                <td>Tenedores, aprobadores y verificadores</td>
+                                <td><a href="#doc-manual">Manual elaborado para GEA</a></td>
+                            </tr>
+                            <tr>
+                                <td>Tablero de seguimiento</td>
+                                <td>Tablero HTML integrado</td>
+                                <td>Controlar tareas, responsables y entregas.</td>
+                                <td>Equipo y docente</td>
+                                <td><a href="#doc-tablero">Tablero de esta actividad</a></td>
+                            </tr>
+                            <tr>
+                                <td>Manual técnico de instalación</td>
+                                <td>HTML y guía aportada</td>
+                                <td>Configurar cPanel y recuperar servicio.</td>
+                                <td>Desarrollador y administrador</td>
+                                <td><a href="#despliegue">Ocho pasos y rollback</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Las cinco evidencias se incluyen en este archivo. El tablero es el seguimiento de esta actividad; no
+                    se atribuye a un GitHub Project inexistente. Las muestras documentales se elaboran con los adjuntos;
+                    no se afirma que la muestra de CHANGELOG ya haya sido incorporada al repositorio.</p>
+            </article>
+            <article class="cardx" id="doc-readme">
+                <h3>README · Muestra del proyecto</h3>
+                <p>GEA (gea_module_0) es la plataforma Django de Propensiones Abogados para inventario, flujo comercial
+                    y certificación documental.</p>
+                <pre><code>git clone https://github.com/sebasmd-projects/gea_module_0.git
+cd gea_module_0
+uv sync
+cp docs/env.example .env
+# Completar variables y preparar MariaDB antes de continuar.
+uv run python manage.py migrate
+uv run python manage.py runserver
+# Pruebas existentes:
+uv run python manage.py test --settings=app_core.settings_test</code></pre>
+                <p>Requisitos: Python 3.11+, Git, uv para desarrollo, MariaDB o PostgreSQL; Redis para controles
+                    compartidos en producción. En cPanel se usa pip con requirements.txt. Crear logs y directorios de
+                    media/estáticos antes de iniciar. Guardar FIELD_ENCRYPTION_KEY fuera del repositorio. Administración
+                    con personal activo y TOTP verificado.</p>
+            </article>
+            <article class="cardx" id="doc-changelog">
+                <h3>CHANGELOG · Muestra trazable</h3>
+                <p><b>Sin versión asignada — cambios descritos en la auditoría suministrada.</b> Las fechas y commits de
+                    implementación no fueron aportados; asociarlos antes de emitir una release.</p>
+                <ul>
+                    <li>Corregido: consulta con identificador inválido que podía devolver un certificado ajeno.</li>
+                    <li>Corregido: contadores de protección que dejaban de aplicar límites ante la caída de Redis; la
+                        guía describe fallo cerrado.</li>
+                    <li>Corregido: exposición directa de adjuntos PQRS mediante el servidor web.</li>
+                </ul>
+                <p>Fuente: «Seguridad», apartados de auditoría 2, 3 y 4, adjunto del proyecto. Estado descrito por la
+                    fuente; no verificado mediante ejecución en esta sesión.</p>
+            </article>
+            <article class="cardx">
+                <h3>Manual de usuario · Muestra</h3>
+                <div id="doc-manual">
+                    <h4>Acceso y segundo factor</h4>
+                    <p>Ingrese por <code>/account/login/</code>. Si tiene TOTP, complete el código de la aplicación
+                        autenticadora. Para configurar el segundo factor use <code>/account/two_factor/setup/</code> y
+                        conserve los códigos de recuperación. El panel exige personal autorizado con segundo factor
+                        verificado.</p>
+                    <h4>Orden de compra</h4>
+                    <p>El aprobador abre una orden autorizada y completa la etapa previa antes de avanzar. Tras guardar,
+                        comprueba estado, responsable y fecha en la línea de tiempo. Si se rechaza una transición,
+                        revisa el paso pendiente; no modifica directamente la base de datos.</p>
+                    <h4>Certificados</h4>
+                    <p>El tenedor consulta su historial y abre únicamente documentos propios. El verificador externo
+                        sigue el QR o enlace público, completa el código enviado a su correo cuando el flujo lo solicita
+                        y carga el archivo para contrastar su huella. Un archivo alterado no debe reconocerse como
+                        válido. Si falla la consulta, reporta el código de referencia sin adjuntar documentación
+                        sensible.</p>
+                    <p>Los tiempos de validez de códigos se verifican contra la configuración desplegada: no se fija
+                        aquí un TTL a partir de antecedentes inconsistentes.</p>
+                </div>
+            </article>
+            <article class="cardx">
+                <h3>Tablero de seguimiento · Evidencia integrada</h3>
+                <div id="doc-tablero" class="board">
+                    <div>
+                        <h4>Elaborado</h4>
+                        <p>Modelo, métricas y plan · Juan Sebastián</p>
+                        <p>Configuración, instalación y soporte · Juan Sebastián</p>
+                        <p>Documentación y sitio HTML · Juan Sebastián</p>
+                    </div>
+                    <div>
+                        <h4>Por ejecutar</h4>
+                        <p>CP-01 a CP-05 y captura de resultados · Juan Sebastián</p>
+                        <p>Validar recursos y compatibilidad V2 · Juan Sebastián</p>
+                    </div>
+                    <div>
+                        <h4>Por cerrar</h4>
+                        <p>Incorporar 2 capturas reales · Juan Sebastián</p>
+                        <p>Publicar, revisar incógnito y registrar commit/tag · Juan Sebastián</p>
+                    </div>
+                </div>
+                <p>Estado de elaboración de este entregable. Las tareas de pruebas y despliegue se mantienen abiertas
+                    hasta que exista evidencia.</p>
+            </article>
+            <details class="cardx">
+                <summary>Mapa funcional aportado</summary>
+                <p>Fuente funcional: <a href="https://github.com/sebasmd-projects/gea_module_0" target="_blank"
+                        rel="noopener">repositorio GEA</a>.</p>
+            </details>
+            <details class="cardx">
+                <summary>Guía técnica aportada</summary>
+                <p>Comandos y puesta en marcha: <a href="https://github.com/sebasmd-projects/gea_module_0"
+                        target="_blank" rel="noopener">repositorio GEA</a>.</p>
+            </details>
+            <details class="cardx">
+                <summary>Auditoría aportada</summary>
+                <p>Hallazgos de seguridad: <a href="https://github.com/sebasmd-projects/gea_module_0" target="_blank"
+                        rel="noopener">repositorio GEA</a>.</p>
+            </details>
+        </section>
+        <section id="referencias" class="page" aria-labelledby="title-referencias">
+            <div class="page-heading"><span class="eyebrow">GEA / 08</span>
+                <h2 id="title-referencias">Referencias</h2>
+            </div>
+            <article class="cardx">
+                <h3>Referencias · APA 7</h3>
+                <p class="reference">International Organization for Standardization. (2023). <i>ISO/IEC 25010:2023:
+                    Systems and software engineering — Systems and software Quality Requirements and Evaluation
+                    (SQuaRE) — Product quality model</i> (2nd ed.). <a
+                    href="https://www.iso.org/standard/78176.html" target="_blank"
+                    rel="noopener">https://www.iso.org/standard/78176.html</a></p>
+                <p class="reference">Sommerville, I. (2011). <i>Ingeniería de software (9.ª ed.). Pearson Educación.</i>
+                    <a href="https://www.pearsonenespanol.com/mexico/tienda-online/ingenieria-software-sommerville-9ed-libro"
+                        target="_blank"
+                        rel="noopener">https://www.pearsonenespanol.com/mexico/tienda-online/ingenieria-software-sommerville-9ed-libro</a>
+                </p>
+                <p class="reference">sebasmd-projects. (s. f.). <i>GEA — Gestión de activos históricos (gea_module_0)
+                        [Software]. GitHub.</i> <a href="https://github.com/sebasmd-projects/gea_module_0"
+                        target="_blank" rel="noopener">https://github.com/sebasmd-projects/gea_module_0</a></p>
+                <p>Sommerville (2011) sustenta la gestión de calidad y configuración.</p>
+                <h4>Fuentes primarias del proyecto</h4>
+                <p>Archivos aportados: «Mapa de Funcionalidades — GEA», «Puesta en marcha de GEA», «Seguridad» y
+                    «Grupo3_TallerRequerimientos(1).pptx». Se utilizan para las funcionalidades, RF/RNF, comandos y
+                    restricciones operativas. Autoría y fechas de las guías no especificadas. La ficha de Conexcol V2
+                    proviene de la información suministrada para esta actividad.</p>
+                <p>Se conservan los identificadores RF-01, RF-02, RF-06, RF-07, RF-08 y RNF-02 de la presentación.</p>
+            </article>
+        </section>
+        <footer>GEA · Ingeniería de Requisitos · Grupo 7. Las metas y los planes se distinguen de la evidencia de
+            ejecución.</footer>
+        <div id="feedback" role="status" aria-live="polite"></div>
+    </main>
+    <script id="evidenceData" type="application/json">{"images":{},"note":""}</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3/dist/umd/simple-datatables.js"></script>
+    <script>
+        (() => {
+            'use strict';
+
+            const ids = ["inicio", "calidad", "pruebas", "configuracion", "despliegue", "soporte", "documentacion", "referencias"];
+
+            document.documentElement.classList.add('js');
+
+            let chart;
+
+            function route() {
+                const raw = decodeURIComponent(location.hash.slice(1) || 'inicio');
+                let key = ids.includes(raw) ? raw : (raw.startsWith('doc-') ? 'documentacion' : 'inicio');
+                document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === key));
+                document.querySelectorAll('nav a').forEach(a => {
+                    const on = a.hash === '#' + key; a.classList.toggle('active', on);
+                    if (on) a.setAttribute('aria-current', 'page');
+                    else a.removeAttribute('aria-current')
+                });
+                if (raw.startsWith('doc-')) requestAnimationFrame(() => document.getElementById(raw)?.scrollIntoView());
+                else window.scrollTo(0, 0);
+                if (key === 'calidad' && chart) chart.resize()
+            };
+
+            window.addEventListener('hashchange', route);
+
+            route();
+
+            if (window.Chart) {
+                chart = new Chart(
+                    document.getElementById('metricChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['M-01 · Pruebas sin fallo', 'M-03 · Cobertura'],
+                        datasets: [{
+                            label: 'Resultado observado (%)',
+                            data: [99.22, 73.5],
+                            backgroundColor: ['#a9e5b9', '#79bfd0'],
+                            borderRadius: 5
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        plugins: {
+                            legend: {
+                                labels: { color: '#dce9e3' }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                min: 0,
+                                max: 100,
+                                ticks: { color: '#afc0c3' },
+                                grid: { color: '#34444e' }
+                            },
+                            y: {
+                                ticks: { color: '#dce9e3' },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                })
+            }
+
+            if (window.simpleDatatables) {
+                const t = document.querySelector('#pruebas .cardx:nth-child(3) table');
+                if (t) try {
+                    new simpleDatatables.DataTable(t, {
+                        searchable: true,
+                        paging: false,
+                        labels: {
+                            placeholder: 'Buscar caso…',
+                            noRows: 'No hay casos',
+                            noResults: 'Sin coincidencias',
+                            info: '{rows} casos de prueba'
+                        }
+                    })
+                } catch (e) {
+                    console.info('Tabla HTML disponible', e)
+                }
+            }
+
+            let data;
+
+            try {
+                data = JSON.parse(
+                    document.getElementById('evidenceData').textContent
+                )
+            }
+            catch (e) {
+                data = {
+                    images: {},
+                    note: ''
+                }
+            }
+
+            const note = document.getElementById('evidenceNote');
+
+            note.value = data.note || '';
+
+            function show(i, src) {
+                const img = document.getElementById('shot' + i);
+                img.src = src;
+                img.hidden = false;
+                document.getElementById('empty' + i).hidden = true
+            }
+
+            Object.entries(data.images || {}).forEach(([i, src]) => show(i, src));
+
+            document.querySelectorAll('[data-shot]').forEach(input => input.addEventListener('change', () => {
+                const f = input.files[0];
+                if (!f) return;
+                if (!/^image\/(png|jpeg|webp)$/.test(f.type)) {
+                    alert('Selecciona PNG, JPEG o WebP.');
+                    return
+                }
+                if (f.size > 10 * 1024 * 1024) {
+                    alert('Usa una imagen de hasta 10 MB.');
+                    return
+                }
+                const reader = new FileReader();
+                reader.onload = () => {
+                    data.images[input.dataset.shot] = reader.result;
+                    show(input.dataset.shot, reader.result);
+                    document.getElementById('feedback').textContent = 'Imagen incorporada. Descarga el HTML actualizado para conservarla.';
+                };
+                reader.readAsDataURL(f)
+            }));
+
+
+            document.getElementById('printBtn').onclick = () => window.print(); document.getElementById('exportBtn').onclick = () => {
+                data.note = note.value; const clone = document.documentElement.cloneNode(true); clone.classList.remove('js');
+                clone.querySelector('#evidenceData').textContent = JSON.stringify(data).replace(/</g, '\u003c');
+                clone.querySelector('#evidenceNote').textContent = note.value;
+                clone.querySelectorAll('.datatable-wrapper').forEach(w => { const t = w.querySelector('table'); if (t) w.replaceWith(t) });
+                const blob = new Blob(['<!doctype html>\n' + clone.outerHTML], { type: 'text/html;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'GEA_Grupo7.html';
+                a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000)
+            }
+        })();
+    </script>
+</body>
+
+</html>
