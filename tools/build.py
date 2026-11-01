@@ -57,6 +57,66 @@ def _read_cert_status() -> str:
 
 CERT_STATUS = _read_cert_status()
 
+GEA_HOST_PREFIX = "https://geausa.propensionesabogados.com/"
+CERT_PDF = "cert/GEA_actividad_final.pdf"
+CERT_PUBLIC_PDF = "cert/GEA_actividad_final-copia-publica.pdf"
+
+
+def _read_cert_data() -> dict | None:
+    """Datos de site/cert/certificado.json, o None si no existe o es ilegible.
+    Solo se usa para mostrar el bloque; NUNCA entra en el hash de contenido."""
+    cert = SITE / "cert" / "certificado.json"
+    if not cert.is_file():
+        return None
+    try:
+        data = json.loads(cert.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def _safe_link(label: str, url: object, field: str) -> str:
+    """Enlace solo si la URL empieza por el host GEA; si no, texto escapado y WARNING."""
+    text = str(url)
+    if text.startswith(GEA_HOST_PREFIX):
+        return f'<a href="{escape(text, quote=True)}">{escape(label)}</a>'
+    print(f"WARNING: certificado.json: {field} no empieza por {GEA_HOST_PREFIX}; "
+          f"se muestra como texto, sin enlace", file=sys.stderr)
+    return f"{escape(label)}: {escape(text)}"
+
+
+def cert_block_html(heading_tag: str = "h2") -> str:
+    """Bloque 'Certificado en GEA (producción)'; vacio si no hay certificado.json.
+    Nunca muestra idempotency_key ni valores tipo clave."""
+    data = _read_cert_data()
+    if data is None:
+        return ""
+    h = heading_tag
+    parts = [
+        '<aside class="hash-box cert-box" aria-label="Certificado en GEA (producción)">',
+        f"<{h}>Certificado en GEA (producción)</{h}>",
+        f'<p>Estado: <span class="cert-status">{escape(CERT_STATUS)}</span></p>',
+    ]
+    if data.get("reference"):
+        parts.append(f"<p>Referencia: {escape(str(data['reference']))}</p>")
+    if data.get("code"):
+        parts.append(f"<p>Código: <code>{escape(str(data['code']))}</code></p>")
+    if data.get("verification_url"):
+        parts.append("<p>" + _safe_link("Verificar el certificado en GEA",
+                                        data["verification_url"], "verification_url") + "</p>")
+    parts.append(f'<p><a href="{CERT_PDF}">Descargar el PDF certificado</a></p>')
+    parts.append(f'<p><a href="{CERT_PUBLIC_PDF}">Copia pública certificada</a> (PDF)</p>')
+    if data.get("public_copy_url"):
+        parts.append("<p>" + _safe_link("Verificar la copia pública en GEA",
+                                        data["public_copy_url"], "public_copy_url") + "</p>")
+    if data.get("source_hash"):
+        parts.append(f"<p>Hash del documento (source_hash): <code>{escape(str(data['source_hash']))}</code></p>")
+    if data.get("public_copy_hash"):
+        parts.append(f"<p>Hash de la copia pública (public_copy_hash): "
+                     f"<code>{escape(str(data['public_copy_hash']))}</code></p>")
+    parts.append("</aside>")
+    return "\n".join(parts)
+
 ERRORS: list[str] = []
 
 
@@ -757,7 +817,17 @@ def main() -> int:
         body = f"<h1>{escape(name)}</h1>\n"
         if fn == "index.html":
             body += hash_box + "\n"
-        body += page_body[fn]
+            cb = cert_block_html("h2")
+            if cb:
+                body += cb + "\n"
+        pb = page_body[fn]
+        if fn == "documentacion.html":
+            cb = cert_block_html("h3")
+            marker = "</tbody></table></div>"
+            if cb and marker in pb:
+                k = pb.index(marker) + len(marker)  # primera tabla = tabla de artefactos
+                pb = pb[:k] + "\n" + cb + pb[k:]
+        body += pb
         html = document(f"{name} — GEA Grupo 7", f"{name}: {proj}", fn, body, content_hash)
         (SITE / fn).write_text(html, encoding="utf-8", newline="\n")
 

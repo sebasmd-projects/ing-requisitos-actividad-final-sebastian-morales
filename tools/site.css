@@ -157,7 +157,7 @@ li > figure { margin: .5rem 0; }
   border-radius: 8px;
   background: var(--surface);
 }
-.hash-box h2 { margin: 0 0 .4rem; padding: 0; border: 0; font-size: 1rem; }
+.hash-box h2, .hash-box h3 { margin: 0 0 .4rem; padding: 0; border: 0; font-size: 1rem; }
 .hash-box p { margin: .3rem 0; }
 .hash-box code, .site-footer code { display: inline-block; word-break: break-all; overflow-wrap: anywhere; }
 .cert-status { font-weight: 700; color: var(--warn); }
