@@ -198,12 +198,11 @@ def render_table(rows: list[list[str]]) -> str:
     out = ['<div class="table-wrap"><table>', "<thead><tr>"]
     out += [f'<th scope="col">{inline(h)}</th>' for h in header]
     out.append("</tr></thead><tbody>")
-    labels = [plain(inline(h)) for h in header]
     for r in body:
         r = (r + [""] * ncol)[:ncol]
         out.append("<tr>")
-        for lab, c in zip(labels, r):
-            out.append(f'<td data-label="{escape(lab)}">{inline(c)}</td>')
+        for c in r:
+            out.append(f"<td>{inline(c)}</td>")
         out.append("</tr>")
     out.append("</tbody></table></div>")
     return "".join(out)

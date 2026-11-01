@@ -16,7 +16,9 @@ Cómo usar este documento:
 
 ### GEA — Gestión Estratégica de Activos
 
-**Descripción** *(78 palabras)*: GEA es la plataforma web de Propensiones Abogados para gestionar activos históricos (bonos alemanes, oro, billetes de alta denominación). Los tenedores registran activos y sus ubicaciones; los compradores crean órdenes que recorren un flujo de aprobación de 12 etapas con permisos por etapa y PDF generados. Incluye un portal público de verificación de certificados con QR, código de barras, OTP por correo y anclaje temporal en Bitcoin, y un módulo PQRS. Está en producción, en español e inglés.
+**Descripción**: GEA es la plataforma web de Propensiones Abogados para gestionar activos históricos (bonos alemanes, oro, billetes de alta denominación). Los tenedores registran activos y sus ubicaciones; los compradores crean órdenes que recorren un flujo de aprobación de 12 etapas con permisos por etapa y PDF generados. Incluye un portal público de verificación de certificados con QR, código de barras, OTP por correo y anclaje temporal en Bitcoin, y un módulo PQRS. Está en producción, en español e inglés.
+
+**Control de versiones (trazabilidad de la actividad):** https://github.com/sebasmd-projects/ing-requisitos-actividad-final-sebastian-morales
 
 **Sitio en producción:** https://geausa.propensionesabogados.com · **Demo (en despliegue):** https://geademo.sebasmd.com · **Repositorio:** https://github.com/sebasmd-projects/gea_module_0
 
@@ -102,7 +104,7 @@ Cómo usar este documento:
 | Fiabilidad | Tenedores, compradores y verificadores dependen del sitio, y depende de servicios que pueden fallar (base de datos, caché, correo); hay que detectar la caída de cualquiera (RNF-04) | Health check `/health/` (`core.HealthCheckView`), que comprueba base de datos, caché y correo; cron de calentamiento cada 3 min; `RateLimit` falla cerrado si la caché cae |
 | Mantenibilidad | El flujo de 12 etapas tiene tres capas de validación y las dependencias se actualizan a menudo por seguridad (Django 4.2 → 5.2, pillow, pypdf); cada cambio no debe romper lo que ya funciona | Suite de 1 156 pruebas automáticas, con `buyers` (flujo de órdenes) y `certificates`/`code_gen` (certificación) como módulos críticos |
 
-**Justificación** *(94 palabras)*: Se elige ISO/IEC 25010 porque evalúa la calidad del producto, y GEA es un producto en producción cuyo valor depende de atributos medibles: que la verificación pública de certificados no exponga documentos ajenos, que el acceso resista la fuerza bruta aun con Redis caído y que el código pueda cambiar sin romper el flujo de 12 etapas. Los modelos de proceso, como CMMI, evalúan la madurez de la organización, lo que no aplica a un equipo pequeño (Solarte et al., 2009). La calidad del producto se especifica con características y métricas verificables (Sommerville, 2011).
+**Justificación**: Se elige ISO/IEC 25010 porque evalúa la calidad del producto, y GEA es un producto en producción cuyo valor depende de atributos medibles: que la verificación pública de certificados no exponga documentos ajenos, que el acceso resista la fuerza bruta aun con Redis caído y que el código pueda cambiar sin romper el flujo de 12 etapas. Los modelos de proceso, como CMMI, evalúan la madurez de la organización, lo que no aplica a un equipo pequeño (Solarte et al., 2009). La calidad del producto se especifica con características y métricas verificables (Sommerville, 2011).
 
 ### Paso 2. Métricas de calidad
 
@@ -398,6 +400,8 @@ Al cerrar el sprint, `check_security` debe terminar con 0 `AVISO` (M-01 = 0).
 
 ## 8. Referencias
 
+Repositorio de la actividad (control de versiones): https://github.com/sebasmd-projects/ing-requisitos-actividad-final-sebastian-morales
+
 Department of Defense. (1994). *Software development and documentation* (MIL-STD-498). Department of Defense.
 
 International Organization for Standardization. (2011). *ISO/IEC 25010:2011 Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — System and software quality models*. https://www.iso.org/standard/35733.html
@@ -411,6 +415,12 @@ sebasmd-projects. (2026). *GEA — Gestión de activos históricos (gea_module_0
 Solarte, G., Muñoz, L. y Arias, B. (2009). Modelos de calidad para procesos de software. *Scientia et Technica, 15*(42). http://www.redalyc.org/articulo.oa?id=84916714069
 
 Sommerville, I. (2011). *Ingeniería del software* (9.ª ed.). Addison-Wesley.
+
+### Uso de inteligencia artificial
+
+Se usaron herramientas de inteligencia artificial (asistentes de lenguaje, entre ellas Claude de Anthropic) como apoyo para el diseño visual del sitio y para la redacción, con revisión de la coherencia y la cohesión del texto. El contenido técnico se tomó del código y del historial de Git de GEA, con su fuente indicada en cada sección.
+
+**Autoría y responsabilidad:** Juan Sebastián Morales Delgado es el autor de este trabajo y se hace responsable de su contenido.
 
 ---
 

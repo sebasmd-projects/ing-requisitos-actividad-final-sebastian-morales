@@ -119,44 +119,21 @@ code {
   overflow-wrap: anywhere;
 }
 
-/* ---------- Tablas: en movil cada fila es una tarjeta (sin scroll horizontal) ---------- */
-.table-wrap { margin: 1rem 0; overflow-x: auto; }
+/* ---------- Tablas: tabla normal; en movil se desplaza dentro de su propio contenedor ---------- */
+.table-wrap { margin: 1rem 0; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
 table { border-collapse: collapse; width: 100%; font-size: .93rem; }
 th, td {
   border: 1px solid var(--border);
   padding: 7px 10px;
   text-align: left;
   vertical-align: top;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 th { background: var(--surface); }
 
-@media screen and (max-width: 700px) {
-  .table-wrap { overflow-x: visible; }
-  table, thead, tbody, tr, th, td { display: block; width: auto; }
-  thead {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-  }
-  tr {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    margin: 0 0 12px;
-    padding: 4px 0;
-  }
-  td { border: 0; padding: 5px 12px; }
-  td::before {
-    content: attr(data-label);
-    display: block;
-    font-size: .78rem;
-    font-weight: 700;
-    letter-spacing: .02em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
+@media screen and (max-width: 767px) {
+  .table-wrap { overflow-x: auto; }
+  table { min-width: 640px; }
 }
 
 /* ---------- Figuras ---------- */
@@ -210,6 +187,11 @@ li > figure { margin: .5rem 0; }
   .site-nav a.current { border-color: var(--accent); }
   main { padding: 16px 40px 32px; }
   .site-footer { padding: 16px 40px 32px; }
+}
+
+/* ---------- Pantallas grandes: columna de contenido mas ancha ---------- */
+@media screen and (min-width: 1200px) {
+  main { max-width: 1400px; }
 }
 
 /* ---------- Portada (print.html) ---------- */
